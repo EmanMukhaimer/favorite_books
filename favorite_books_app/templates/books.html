@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="padding: 10px;">
+    <div>
+        <div style="display: flex; justify-content: space-between;  border-bottom: 1pt solid black">
+            <h1>Wellcome, {{user.first_name}}</h1>
+            <a href="/logout">log off</a>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <h2>Add a Favarite Book</h2>
+                <form action="/add_book" method="post">
+                    {% csrf_token %}
+                    <table>
+                        <input type="hidden" name="uploaded_by" value="{{user.id}}">
+                        <tr><td>Title</td><td><input type="text" name="title"></td></tr>
+                        <tr><td>Description</td><td><input type="text" name="description"></td></tr>
+                    </table>
+                    <input type="submit" value="Add">
+                </form>
+            </div>
+            <div>
+                <h2>All Books</h2>
+                {% for book in books %}
+                    <a href="{% url 'books' number=book.id %}"><strong>{{book.title}}</strong></a>
+                    <p>(added by {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}})</p>
+                    {% if book in user.liked_books.all %}
+                        <p>this is one of your favorites</p>
+                    {% else %}
+                        <p><a href="{% url 'add_fav' book_id=book.id user_id=user.id %}">Add to Favarites</a></p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+</body>
+</html>

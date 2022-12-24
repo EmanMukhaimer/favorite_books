@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="padding: 10px;">
+    <div>
+        <div style="display: flex; justify-content: space-between;  border-bottom: 1pt solid black ; margin-bottom: 10px;">
+            <h1>Wellcome, {{user.first_name}}</h1>
+            <a href="/logout">log off</a>
+        </div>
+        {% if book in user.uploaded_books.all %}
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <form action="{% url 'update_book' number=book.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="title" value="{{book.title}}"> 
+                    <p>Added by: {{book.uploaded_by}}</p>
+                    <p>Added on: {{book.created_at}}</p>
+                    <p>Last updated on: {{book.updated_at}}</p>
+                    <table>
+                        <tr><td>Description</td><td><input type="text" name="description" value="{{book.description}}"></td></tr>
+                    </table>
+                    <input type="submit" value="Update">
+                </form>
+                <form action="{% url 'delete_book' book.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete">
+                </form>
+            </div>
+            <div>
+                <h2>Users Who Like This Book</h2>
+                {% for user_like in book.users_who_like.all %}
+                    <ul>
+                        <li>
+                            {{user_like.first_name}} {{user_like.last_name}}
+                            {% if book in user.liked_books.all %}
+                                <a href="{% url 'remove_fav' book_id=book.id user_id=user.id %}">Un-Favorite</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                {% endfor %}
+                {% if book not in user.liked_books.all %}
+                    <a href="{% url 'add_fav' book_id=book.id user_id=user.id %}">Add to Favorites</a>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <p>{{book.title}}</p>
+                <p>Added by: {{book.uploaded_by}}</p>
+                <p>Added on: {{book.created_at}}</p>
+                <p>Last updated on: {{book.updated_at}}</p>
+                <p>Description:{{book.description}}</p>  
+            </div>
+            <div>
+                <h2>Users Who Like This Book</h2>
+                {% for user_like in book.users_who_like.all %}
+                    <ul>
+                        <li>
+                            {{user_like.first_name}} {{user_like.last_name}}
+                        </li>
+                    </ul>
+                {% endfor %}
+                {% if book in user.liked_books.all %}
+                    <a href="{% url 'remove_fav' book_id=book.id user_id=user.id %}">Un-Favorite</a>
+                {% else %}
+                    <a href="{% url 'add_fav' book_id=book.id user_id=user.id %}">Add to Favorites</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif%}
+    </div>
+</body>
+</html>

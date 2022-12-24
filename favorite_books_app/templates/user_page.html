@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="padding: 10px;">
+    <div>
+        <div style="display: flex; justify-content: space-between;  border-bottom: 1pt solid black">
+            <h1>Wellcome, {{user.first_name}}</h1>
+            <a href="/logout">log off</a>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <h2>All {{user.first_name}} Favarite Books</h2>
+                {% for book in user.liked_books.all %}
+                    <p><strong>{{book.title}}</strong></p>
+                {% endfor %}
+            </div>
+        </div>
+</body>
+</html>
