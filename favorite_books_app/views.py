@@ -10,7 +10,7 @@ def register(request):
     if error_reg(request):
         return redirect("/")
     else:
-        return redirect('/success')
+        return redirect('/books')
 
 def login(request):
     if error_log(request):
@@ -57,6 +57,10 @@ def remove_fav(request, book_id, user_id):
     user.liked_books.remove(book)
     return redirect('books', number=book_id)
 
+# Description: This function will do ....
+# Author: Eman
+# Inputs: ...
+# Outputs: ... 
 def update_book(request, number):
     error_update_book(request,number)
     return redirect('books', number=number)
